@@ -1,0 +1,105 @@
+# vault-sentinel-workflow.yaml
+# Chainlink CRE Workflow: Monitor ETH price + TVL, compute risk score, protect vault
+#
+# Trigger: every 60 seconds
+# Steps:
+#   1. Fetch ETH/USD price from Chainlink Data Feed (mainnet)
+#   2. Fetch Lido TVL from DeFiLlama HTTP API
+#   3. Compute weighted risk score in JavaScript
+#   4. Always write risk score on-chain (setRiskScore)
+#      → contract auto-triggers emergency if score >= 70
+#   5. Log result for debugging
+
+name: vault-sentinel-risk-monitor
+description: "Monitors ETH price deviation + TVL drain to compute a risk score. Writes score on-chain every 60s. VaultSentinel contract triggers emergency fund return if score >= 70."
+
+trigger:
+  type: cron
+  schedule: "*/60 * * * * *"
+
+steps:
+  # ─── Step 1: ETH/USD from Chainlink Data Feed (mainnet address) ───────────
+  - id: fetch_eth_price
+    type: chainlink-data-feed
+    params:
+      feedAddress: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"  # ETH/USD Mainnet
+    output: eth_price
+    # Returns: { answer: <price * 1e8>, decimals: 8, updatedAt: <timestamp> }
+
+  # ─── Step 2: Lido TVL from DeFiLlama ─────────────────────────────────────
+  - id: fetch_tvl
+    type: http
+    params:
+      method: GET
+      url: "https://api.llama.fi/protocol/lido"
+      headers:
+        Accept: "application/json"
+    output: tvl_response
+    # Returns: DeFiLlama protocol object with currentChainTvls, tvl history, etc.
+
+  # ─── Step 3: Compute weighted risk score ─────────────────────────────────
+  - id: compute_risk_score
+    type: javascript
+    inputs:
+      ethPrice: "{{fetch_eth_price.answer}}"
+      decimals: "{{fetch_eth_price.decimals}}"
+      tvlCurrent: "{{tvl_response.currentChainTvls.Ethereum}}"
+    code: |
+      // Normalize Chainlink price from 1e8 fixed-point
+      const price = Number(ethPrice) / Math.pow(10, Number(decimals));
+
+      // Baseline: ETH price we consider "safe" — update before demo
+      const BASELINE_PRICE = 3500;
+
+      // Price score: how far ETH dropped below baseline (amplified x2 for sensitivity)
+      const priceDrop = Math.max(0, (BASELINE_PRICE - price) / BASELINE_PRICE * 100);
+      const priceScore = Math.min(100, priceDrop * 2);
+
+      // TVL score: how far Lido TVL dropped below baseline
+      const tvl = Number(tvlCurrent || 0);
+      const TVL_BASELINE = 10_000_000_000; // $10B Lido baseline
+      const tvlDrop = Math.max(0, (TVL_BASELINE - tvl) / TVL_BASELINE * 100);
+      const tvlScore = Math.min(100, tvlDrop * 2);
+
+      // Weighted composite: 60% price + 40% TVL
+      const riskScore = Math.round((priceScore * 0.6) + (tvlScore * 0.4));
+
+      return {
+        riskScore,
+        priceScore: Math.round(priceScore),
+        tvlScore: Math.round(tvlScore),
+        ethPriceUsd: price,
+        tvlUsd: tvl,
+      };
+    output: risk_result
+
+  # ─── Step 4: Write risk score on-chain (ALWAYS runs) ─────────────────────
+  # VaultSentinel.setRiskScore() will internally call _executeEmergency()
+  # if score >= riskThreshold (70), returning all user funds automatically.
+  - id: write_risk_score
+    type: eth-transaction
+    params:
+      rpcUrl: "{{env.TENDERLY_RPC_URL}}"
+      contractAddress: "{{env.VAULT_SENTINEL_ADDRESS}}"
+      abi:
+        - "function setRiskScore(uint256 score) external"
+      function: setRiskScore
+      args:
+        - "{{risk_result.riskScore}}"
+      privateKey: "{{secrets.CRE_WALLET_PRIVATE_KEY}}"
+
+  # ─── Step 5: Log for debugging ────────────────────────────────────────────
+  - id: log_result
+    type: javascript
+    inputs:
+      result: "{{risk_result}}"
+    code: |
+      const r = result;
+      console.log(`[VaultSentinel] ─────────────────────`);
+      console.log(`  Risk Score : ${r.riskScore}/100`);
+      console.log(`  ETH Price  : $${r.ethPriceUsd.toFixed(2)} | score: ${r.priceScore}`);
+      console.log(`  Lido TVL   : $${(r.tvlUsd/1e9).toFixed(2)}B | score: ${r.tvlScore}`);
+      if (r.riskScore >= 70) {
+        console.log(`  ⚠️  THRESHOLD BREACHED — emergency triggered!`);
+      }
+      return result;
