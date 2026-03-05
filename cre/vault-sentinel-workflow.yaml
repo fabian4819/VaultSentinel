@@ -1,17 +1,22 @@
 # vault-sentinel-workflow.yaml
-# Chainlink CRE Workflow: Monitor ETH price + TVL, compute risk score, protect vault
+# Chainlink CRE Workflow: Systemic DeFi Risk Monitor
 #
 # Trigger: every 60 seconds
 # Steps:
 #   1. Fetch ETH/USD price from Chainlink Data Feed (mainnet)
-#   2. Fetch Lido TVL from DeFiLlama HTTP API
-#   3. Compute weighted risk score in JavaScript
-#   4. Always write risk score on-chain (setRiskScore)
-#      → contract auto-triggers emergency if score >= 70
-#   5. Log result for debugging
+#   2. Fetch Lido TVL from DeFiLlama
+#   3. Fetch Aave/Maker protocol stats from DeFiLlama
+#   4. Compute SYSTEMIC RISK INDEX (weighted composite score) in JavaScript
+#   5. Write risk score on-chain (setRiskScore)
+#      → VaultSentinel auto-triggers emergency if score >= 70
+#   6. Log result for debugging
 
-name: vault-sentinel-risk-monitor
-description: "Monitors ETH price deviation + TVL drain to compute a risk score. Writes score on-chain every 60s. VaultSentinel contract triggers emergency fund return if score >= 70."
+name: systemic-risk-monitor
+description: |
+  Aggregates risk signals from Chainlink ETH/USD Data Feed + multiple DeFi protocol TVLs
+  (Lido, Aave, MakerDAO via DeFiLlama) to produce a Systemic DeFi Risk Index.
+  Writes the score on-chain to VaultSentinel every 60s.
+  If score >= 70, the vault automatically returns ALL user assets (ETH + ERC20s).
 
 trigger:
   type: cron
@@ -27,55 +32,97 @@ steps:
     # Returns: { answer: <price * 1e8>, decimals: 8, updatedAt: <timestamp> }
 
   # ─── Step 2: Lido TVL from DeFiLlama ─────────────────────────────────────
-  - id: fetch_tvl
+  - id: fetch_lido_tvl
     type: http
     params:
       method: GET
       url: "https://api.llama.fi/protocol/lido"
       headers:
         Accept: "application/json"
-    output: tvl_response
-    # Returns: DeFiLlama protocol object with currentChainTvls, tvl history, etc.
+    output: lido_response
 
-  # ─── Step 3: Compute weighted risk score ─────────────────────────────────
-  - id: compute_risk_score
+  # ─── Step 3: Aave TVL from DeFiLlama ─────────────────────────────────────
+  - id: fetch_aave_tvl
+    type: http
+    params:
+      method: GET
+      url: "https://api.llama.fi/protocol/aave"
+      headers:
+        Accept: "application/json"
+    output: aave_response
+
+  # ─── Step 4: MakerDAO TVL from DeFiLlama ─────────────────────────────────
+  - id: fetch_maker_tvl
+    type: http
+    params:
+      method: GET
+      url: "https://api.llama.fi/protocol/makerdao"
+      headers:
+        Accept: "application/json"
+    output: maker_response
+
+  # ─── Step 5: Compute SYSTEMIC RISK INDEX ──────────────────────────────────
+  - id: compute_systemic_risk
     type: javascript
     inputs:
       ethPrice: "{{fetch_eth_price.answer}}"
       decimals: "{{fetch_eth_price.decimals}}"
-      tvlCurrent: "{{tvl_response.currentChainTvls.Ethereum}}"
+      lidoTvl: "{{lido_response.currentChainTvls.Ethereum}}"
+      aaveTvl: "{{aave_response.currentChainTvls.Ethereum}}"
+      makerTvl: "{{maker_response.currentChainTvls.Ethereum}}"
     code: |
-      // Normalize Chainlink price from 1e8 fixed-point
+      // Normalize ETH price from Chainlink 1e8 fixed-point
       const price = Number(ethPrice) / Math.pow(10, Number(decimals));
 
-      // Baseline: ETH price we consider "safe" — update before demo
-      const BASELINE_PRICE = 3500;
+      // ── FACTOR 1: ETH Price Crash Score (30% weight) ─────────────────
+      const PRICE_BASELINE = 3500;
+      const priceDrop = Math.max(0, (PRICE_BASELINE - price) / PRICE_BASELINE * 100);
+      const priceScore = Math.min(100, priceDrop * 2.5);
 
-      // Price score: how far ETH dropped below baseline (amplified x2 for sensitivity)
-      const priceDrop = Math.max(0, (BASELINE_PRICE - price) / BASELINE_PRICE * 100);
-      const priceScore = Math.min(100, priceDrop * 2);
+      // ── FACTOR 2: Lido TVL Drain Score (25% weight) ──────────────────
+      const LIDO_BASELINE = 10_000_000_000; // $10B
+      const lidoTvlNum = Number(lidoTvl || LIDO_BASELINE);
+      const lidoDrop = Math.max(0, (LIDO_BASELINE - lidoTvlNum) / LIDO_BASELINE * 100);
+      const lidoScore = Math.min(100, lidoDrop * 2);
 
-      // TVL score: how far Lido TVL dropped below baseline
-      const tvl = Number(tvlCurrent || 0);
-      const TVL_BASELINE = 10_000_000_000; // $10B Lido baseline
-      const tvlDrop = Math.max(0, (TVL_BASELINE - tvl) / TVL_BASELINE * 100);
-      const tvlScore = Math.min(100, tvlDrop * 2);
+      // ── FACTOR 3: Aave TVL Drain Score (25% weight) ──────────────────
+      const AAVE_BASELINE = 8_000_000_000; // $8B
+      const aaveTvlNum = Number(aaveTvl || AAVE_BASELINE);
+      const aaveDrop = Math.max(0, (AAVE_BASELINE - aaveTvlNum) / AAVE_BASELINE * 100);
+      const aaveScore = Math.min(100, aaveDrop * 2);
 
-      // Weighted composite: 60% price + 40% TVL
-      const riskScore = Math.round((priceScore * 0.6) + (tvlScore * 0.4));
+      // ── FACTOR 4: MakerDAO TVL Drain Score (20% weight) ──────────────
+      const MAKER_BASELINE = 6_000_000_000; // $6B
+      const makerTvlNum = Number(makerTvl || MAKER_BASELINE);
+      const makerDrop = Math.max(0, (MAKER_BASELINE - makerTvlNum) / MAKER_BASELINE * 100);
+      const makerScore = Math.min(100, makerDrop * 2);
+
+      // ── Weighted Composite: Systemic Risk Index ───────────────────────
+      const riskScore = Math.round(
+        (priceScore * 0.30) +
+        (lidoScore  * 0.25) +
+        (aaveScore  * 0.25) +
+        (makerScore * 0.20)
+      );
 
       return {
         riskScore,
-        priceScore: Math.round(priceScore),
-        tvlScore: Math.round(tvlScore),
-        ethPriceUsd: price,
-        tvlUsd: tvl,
+        breakdown: {
+          ethPrice: price,
+          priceScore: Math.round(priceScore),
+          lidoTvlB: (lidoTvlNum / 1e9).toFixed(2),
+          lidoScore: Math.round(lidoScore),
+          aaveTvlB: (aaveTvlNum / 1e9).toFixed(2),
+          aaveScore: Math.round(aaveScore),
+          makerTvlB: (makerTvlNum / 1e9).toFixed(2),
+          makerScore: Math.round(makerScore),
+        }
       };
     output: risk_result
 
-  # ─── Step 4: Write risk score on-chain (ALWAYS runs) ─────────────────────
+  # ─── Step 6: Write risk score on-chain (ALWAYS runs) ─────────────────────
   # VaultSentinel.setRiskScore() will internally call _executeEmergency()
-  # if score >= riskThreshold (70), returning all user funds automatically.
+  # if score >= riskThreshold (70), sweeping all ETH + ERC20s back to users.
   - id: write_risk_score
     type: eth-transaction
     params:
@@ -88,18 +135,24 @@ steps:
         - "{{risk_result.riskScore}}"
       privateKey: "{{secrets.CRE_WALLET_PRIVATE_KEY}}"
 
-  # ─── Step 5: Log for debugging ────────────────────────────────────────────
+  # ─── Step 7: Log full breakdown for debugging ─────────────────────────────
   - id: log_result
     type: javascript
     inputs:
       result: "{{risk_result}}"
     code: |
       const r = result;
-      console.log(`[VaultSentinel] ─────────────────────`);
-      console.log(`  Risk Score : ${r.riskScore}/100`);
-      console.log(`  ETH Price  : $${r.ethPriceUsd.toFixed(2)} | score: ${r.priceScore}`);
-      console.log(`  Lido TVL   : $${(r.tvlUsd/1e9).toFixed(2)}B | score: ${r.tvlScore}`);
+      const b = r.breakdown;
+      console.log(`[VaultSentinel] ═══ SYSTEMIC RISK INDEX ═══`);
+      console.log(`  SCORE       : ${r.riskScore}/100 ${r.riskScore >= 70 ? "⚠️  EMERGENCY!" : "✅"}`);
+      console.log(`  ETH Price   : $${b.ethPrice.toFixed(2)} → priceScore:  ${b.priceScore}`);
+      console.log(`  Lido TVL    : $${b.lidoTvlB}B  → lidoScore:   ${b.lidoScore}`);
+      console.log(`  Aave TVL    : $${b.aaveTvlB}B  → aaveScore:   ${b.aaveScore}`);
+      console.log(`  MakerDAO    : $${b.makerTvlB}B  → makerScore:  ${b.makerScore}`);
+      console.log(`  Weights     : ETH 30% | Lido 25% | Aave 25% | Maker 20%`);
+      console.log(`════════════════════════════════════════`);
       if (r.riskScore >= 70) {
-        console.log(`  ⚠️  THRESHOLD BREACHED — emergency triggered!`);
+        console.log(`  🚨 THRESHOLD BREACHED — VaultSentinel emergency triggered!`);
+        console.log(`  All user ETH + ERC20 assets returned automatically.`);
       }
       return result;
