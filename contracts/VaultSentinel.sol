@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract VaultSentinel is Ownable {
     enum VaultState { ACTIVE, GUARDED, EMERGENCY }
 
-    IERC20 public immutable token;
     address public authorizedCaller;    // CRE workflow address
     uint256 public riskThreshold;       // score 0-100 that triggers emergency
     VaultState public vaultState;
@@ -31,23 +29,22 @@ contract VaultSentinel is Ownable {
         _;
     }
 
-    constructor(address token_, address authorizedCaller_, uint256 riskThreshold_)
+    constructor(address authorizedCaller_, uint256 riskThreshold_)
         Ownable(msg.sender)
     {
-        token = IERC20(token_);
         authorizedCaller = authorizedCaller_;
         riskThreshold = riskThreshold_;
         vaultState = VaultState.ACTIVE;
     }
 
-    function deposit(uint256 amount) external notEmergency {
-        require(amount > 0, "Amount must be > 0");
-        token.transferFrom(msg.sender, address(this), amount);
+    // Accepts native ETH
+    function deposit() external payable notEmergency {
+        require(msg.value > 0, "Amount must be > 0");
         if (_balances[msg.sender] == 0) {
             _depositors.push(msg.sender);
         }
-        _balances[msg.sender] += amount;
-        emit Deposited(msg.sender, amount);
+        _balances[msg.sender] += msg.value;
+        emit Deposited(msg.sender, msg.value);
     }
 
     function setRiskScore(uint256 score) external onlyAuthorized {
@@ -76,8 +73,13 @@ contract VaultSentinel is Ownable {
             uint256 bal = _balances[user];
             if (bal > 0) {
                 _balances[user] = 0;
-                token.transfer(user, bal);
-                emit FundsReturned(user, bal);
+                // Refund native ETH via call to avoid gas limitations on transfer
+                (bool success, ) = user.call{value: bal}("");
+                if (success) {
+                    emit FundsReturned(user, bal);
+                } else {
+                    _balances[user] = bal; // revert state if transfer fails
+                }
             }
         }
     }
@@ -88,7 +90,6 @@ contract VaultSentinel is Ownable {
 
     function resetVault() external onlyOwner {
         vaultState = VaultState.ACTIVE;
-        // Note: _depositors array is intentionally kept for re-depositors
     }
 
     function setAuthorizedCaller(address caller) external onlyOwner {

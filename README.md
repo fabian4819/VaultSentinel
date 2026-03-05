@@ -11,9 +11,9 @@ Vault Sentinel monitors market conditions (ETH price deviation + TVL drain) usin
 ## Project Architecture
 
 1. **Smart Contracts (`contracts/VaultSentinel.sol`)**
-   - Holds user deposits in a `MockERC20` token.
+   - Holds user deposits in native ETH.
    - Exposes `setRiskScore()` callable only by designated CRE workflow.
-   - If risk score > 70, transitions to `EMERGENCY` state and automatically returns all funds to depositors.
+   - If risk score > 70, transitions to `EMERGENCY` state and automatically refunds ETH to depositors' wallets.
 2. **Chainlink CRE Workflow (`cre/vault-sentinel-workflow.yaml`)**
    - Runs every 60s.
    - Fetches ETH/USD from Chainlink Data Feeds (Mainnet).
@@ -57,5 +57,4 @@ Vault Sentinel monitors market conditions (ETH price deviation + TVL drain) usin
 
 *Deployed on Tenderly Virtual TestNet (Mainnet Fork, Chain ID 9991)*
 
-- **VaultSentinel:** `0x261a123cB069E154e34e8047acF665CfB4880835`
-- **MockERC20 (mUSD):** `0x87BaB170C4292c965bfeCAD0014D073a404c369E`
+- **VaultSentinel:** `0x84bF3a495d0431c034462B09797698Bc1f78E824`

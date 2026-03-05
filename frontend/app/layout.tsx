@@ -23,7 +23,7 @@ const queryClient = new QueryClient();
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             {children}

@@ -5,8 +5,14 @@ import { VAULT_ADDRESS, VAULT_ABI, VAULT_STATES } from "@/lib/contract";
 import { RiskGauge } from "./components/RiskGauge";
 import { DepositForm } from "./components/DepositForm";
 import { ActionPanel } from "./components/ActionPanel";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
@@ -33,17 +39,19 @@ export default function Home() {
       <div className="max-w-xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">🛡️ Vault Sentinel</h1>
-          {isConnected ? (
+          {mounted && isConnected ? (
             <button onClick={() => disconnect()} className="text-xs text-gray-400 hover:text-white transition-colors">
               {address?.slice(0, 6)}...{address?.slice(-4)} ✕
             </button>
-          ) : (
+          ) : mounted ? (
             <button
               onClick={() => connect({ connector: injected() })}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
             >
               Connect Wallet
             </button>
+          ) : (
+            <div className="w-24 h-8 bg-gray-800 rounded-lg animate-pulse" />
           )}
         </div>
 
@@ -69,10 +77,10 @@ export default function Home() {
         </div>
 
         {/* Deposit Form */}
-        {isConnected && <DepositForm />}
+        {mounted && isConnected && <DepositForm />}
 
         {/* Action Panel */}
-        {isConnected && <ActionPanel vaultState={stateIndex} />}
+        {mounted && isConnected && <ActionPanel vaultState={stateIndex} />}
 
         {/* Info Footer */}
         <div className="text-center text-xs text-gray-600 mt-8 space-y-1">

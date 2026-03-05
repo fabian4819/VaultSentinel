@@ -1,35 +1,25 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { VaultSentinel, MockERC20 } from "../../typechain-types";
+import { VaultSentinel } from "../../typechain-types";
 
-describe("VaultSentinel", function () {
+describe("VaultSentinel (Native ETH)", function () {
     let vault: VaultSentinel;
-    let token: MockERC20;
     let owner: any, user: any, cre: any;
 
     beforeEach(async function () {
         [owner, user, cre] = await ethers.getSigners();
 
-        const MockERC20Factory = await ethers.getContractFactory("MockERC20");
-        token = await MockERC20Factory.deploy("Mock USD", "mUSD", 18) as MockERC20;
-        await token.waitForDeployment();
-
         const VaultSentinelFactory = await ethers.getContractFactory("VaultSentinel");
         vault = await VaultSentinelFactory.deploy(
-            await token.getAddress(),
             cre.address,
             70
         ) as VaultSentinel;
         await vault.waitForDeployment();
-
-        // Fund user and approve vault
-        await token.mint(user.address, ethers.parseEther("100"));
-        await token.connect(user).approve(await vault.getAddress(), ethers.parseEther("100"));
     });
 
-    it("should accept user deposit", async function () {
-        await vault.connect(user).deposit(ethers.parseEther("100"));
-        expect(await vault.getUserBalance(user.address)).to.equal(ethers.parseEther("100"));
+    it("should accept user ETH deposit", async function () {
+        await vault.connect(user).deposit({ value: ethers.parseEther("1.0") });
+        expect(await vault.getUserBalance(user.address)).to.equal(ethers.parseEther("1.0"));
     });
 
     it("should allow CRE to write risk score", async function () {
@@ -42,21 +32,24 @@ describe("VaultSentinel", function () {
     });
 
     it("should trigger emergency and return funds to user", async function () {
-        await vault.connect(user).deposit(ethers.parseEther("100"));
-        const balanceBefore = await token.balanceOf(user.address);
+        await vault.connect(user).deposit({ value: ethers.parseEther("1.0") });
 
-        await vault.connect(cre).triggerEmergency();
+        const balanceBefore = await ethers.provider.getBalance(user.address);
+
+        const tx = await vault.connect(cre).triggerEmergency();
+        const receipt = await tx.wait();
 
         expect(await vault.vaultState()).to.equal(2); // EMERGENCY = 2
-        expect(await token.balanceOf(user.address)).to.equal(
-            balanceBefore + ethers.parseEther("100")
-        );
+
+        // Check balance increased (approx 1 ETH, accounting for gas if any, though CRE pays gas here)
+        const balanceAfter = await ethers.provider.getBalance(user.address);
+        expect(balanceAfter - balanceBefore).to.equal(ethers.parseEther("1.0"));
     });
 
     it("should block deposits in EMERGENCY state", async function () {
         await vault.connect(cre).triggerEmergency();
         await expect(
-            vault.connect(user).deposit(ethers.parseEther("10"))
+            vault.connect(user).deposit({ value: ethers.parseEther("0.1") })
         ).to.be.revertedWith("Vault is in emergency");
     });
 

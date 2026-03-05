@@ -1,6 +1,5 @@
 {
-  "mockERC20": "0x87BaB170C4292c965bfeCAD0014D073a404c369E",
-  "vaultSentinel": "0x261a123cB069E154e34e8047acF665CfB4880835",
+  "vaultSentinel": "0x84bF3a495d0431c034462B09797698Bc1f78E824",
   "network": "tenderly-mainnet-fork",
   "chainId": 9991,
   "deployer": "0xdfcDBf41Eb7150592F6495F921891bc5e11A94d2"
