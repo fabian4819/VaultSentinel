@@ -232,42 +232,47 @@ export default function Home() {
         riskScore={score}
       />
 
-      <footer className="border-t border-gray-800/40 py-20 mt-20 relative bg-black/50">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex justify-center items-center gap-3 mb-8"
-          >
-            <div className="relative w-8 h-8 flex items-center justify-center">
-              <Image src="/logo.svg" alt="GuardAI Logo" width={32} height={32} className="w-full h-full opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500" />
-            </div>
-            <span className="font-extrabold text-xl text-gray-400 tracking-tighter uppercase font-mono">GuardAI</span>
-          </motion.div>
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-sm text-gray-600 mb-10 max-w-md mx-auto leading-relaxed font-medium"
-          >
-            Engineering a trustless failsafe for the DeFi ecosystem.<br />
-            Prototype build — Chainlink Convergence 2026.
-          </motion.p>
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="flex justify-center flex-wrap gap-8 text-[10px] text-gray-700 uppercase font-black tracking-[0.2em]"
-          >
-            <span className="text-gray-800">© 2026 Sentinel Lab</span>
-            <a href="#" className="hover:text-blue-500 transition-all border-b border-transparent hover:border-blue-500/50">Source Code</a>
-            <a href="#" className="hover:text-blue-500 transition-all border-b border-transparent hover:border-blue-500/50">Documentation</a>
-            <a href="#" className="hover:text-blue-500 transition-all border-b border-transparent hover:border-blue-500/50">Audit Report</a>
-          </motion.div>
+      <footer className="relative py-24 overflow-hidden">
+        {/* Top Border Gradient */}
+        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+        
+        {/* Background Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-32 bg-emerald-500/5 blur-[100px] pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+          {/* Logo Section */}
+          <div className="mb-12">
+            <span className="text-2xl font-black text-white tracking-tighter uppercase">
+              Guard<span className="text-emerald-500">AI</span>
+            </span>
+            <p className="text-gray-500 text-sm mt-4 max-w-xs mx-auto leading-relaxed">
+              Engineering a trustless failsafe for the decentralized future.
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <nav className="mb-16">
+            <ul className="flex items-center justify-center gap-12">
+              {['Pools', 'Deposit', 'Portfolio'].map((item) => (
+                <li key={item}>
+                  <a 
+                    href="#" 
+                    className="text-[10px] font-bold text-gray-400 hover:text-emerald-400 uppercase tracking-[0.3em] transition-all duration-300"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Bottom Bar */}
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-12 h-px bg-white/5" />
+            <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">
+              © 2026 GuardAI
+            </span>
+          </div>
         </div>
       </footer>
     </div>
