@@ -40,9 +40,12 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             whileHover={{ opacity: 0.8 }}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+            <div className="relative w-2.5 h-2.5">
+              <div className="absolute inset-0 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+              <div className="-inset-0.5 absolute border border-blue-400/30 rounded-full scale-110 group-hover:scale-150 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
+            </div>
             <span className="font-bold text-[10px] tracking-[0.2em] text-white uppercase opacity-70 whitespace-nowrap">
-              Vault Sentinel
+              GuardAI
             </span>
           </motion.div>
 

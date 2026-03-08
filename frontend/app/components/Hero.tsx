@@ -215,13 +215,9 @@ export function Hero() {
         </motion.div>
 
         {/* Main Title */}
-        <h1 className="hero-title text-6xl md:text-8xl font-bold mb-6 leading-none tracking-tight">
-          <span className="block text-white">
-            Vault
-          </span>
-          <span className="block text-blue-500">
-            Sentinel
-          </span>
+        <h1 className="hero-title text-6xl md:text-8xl font-black mb-6 leading-tight tracking-tight whitespace-nowrap">
+          <span className="text-white">Guard</span>
+          <span className="text-blue-500">AI</span>
         </h1>
 
         {/* Subtitle */}
@@ -237,7 +233,7 @@ export function Hero() {
           className="hero-description text-base text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
           Powered by Chainlink Functions and CRE Workflows. Protect your DeFi assets 
-          with real-time systemic risk monitoring and instant emergency response.
+          with real-time risk monitoring and instant autonomous response.
         </motion.p>
 
         {/* CTA Buttons */}

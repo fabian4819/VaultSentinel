@@ -10,7 +10,7 @@ import { SystemicRiskFeatures } from "./components/SystemicRiskFeatures";
 import { Portfolio } from "./components/Portfolio";
 import { PoolsGrid } from "./components/PoolsGrid";
 import { PoolDetailModal } from "./components/PoolDetailModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
@@ -45,6 +45,10 @@ export default function Home() {
     setPreSelectedToken(poolIndex);
     setActiveTab(2); // Switch to Deposit tab
   };
+
+  useEffect(() => {
+    document.title = "GuardAI | Autonomous Risk Protection";
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#020204] text-white selection:bg-blue-500/30 overflow-x-hidden">
