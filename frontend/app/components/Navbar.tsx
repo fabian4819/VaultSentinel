@@ -84,10 +84,21 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-4"
+                className="flex items-center gap-4 px-4 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-xl group transition-all hover:border-emerald-500/40"
               >
-                <p className="text-[11px] font-mono font-bold text-gray-400 whitespace-nowrap tracking-wider">{address?.slice(0, 4)}...{address?.slice(-4)}</p>
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                  <p className="text-[11px] font-mono font-bold text-emerald-400/80 whitespace-nowrap tracking-wider">
+                    {address?.slice(0, 6)}...{address?.slice(-4)}
+                  </p>
+                </div>
+                <div className="w-px h-3 bg-white/10" />
+                <button 
+                  onClick={() => disconnect()}
+                  className="text-[10px] font-bold text-white/40 uppercase tracking-widest hover:text-red-400 transition-colors"
+                >
+                  Disconnect
+                </button>
               </motion.div>
             ) : mounted ? (
               <motion.button

@@ -1,7 +1,7 @@
 {
-  "vaultSentinel": "0xd5474D48fb3DB3CF012D4D3fAad8bf3aE409E450",
-  "mockUSDC": "0x305477421e3809800896af4D4Ff8cAC5a750Ec96",
-  "mockStETH": "0xC07DE3Bd89F83A01B184cF15da84300b947DC97F",
+  "vaultSentinel": "0x0fD8E63a78b53B7b470763832521ddc20DA80e6f",
+  "mockUSDC": "0x87BaB170C4292c965bfeCAD0014D073a404c369E",
+  "mockStETH": "0x009a5d466d1cefC40484a4f9c7334f605E5B26e7",
   "network": "tenderly-mainnet-fork",
   "chainId": 9991,
   "deployer": "0xdfcDBf41Eb7150592F6495F921891bc5e11A94d2"

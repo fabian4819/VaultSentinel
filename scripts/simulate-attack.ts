@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
-import deploymentData from "../deployment.json" assert { type: "json" };
+import * as fs from "fs";
+const deploymentData = JSON.parse(fs.readFileSync("./deployment.json", "utf-8"));
 
 async function main() {
     const [owner] = await ethers.getSigners();
