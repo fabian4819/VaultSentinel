@@ -76,10 +76,10 @@ export default function Home() {
             >
               <Hero />
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="mt-16">
+                <div className="mt-0">
                   <RiskGauge score={score} />
                 </div>
-                <div className="mt-16">
+                <div className="mt-0">
                   <SystemicRiskFeatures />
                 </div>
                 <HowItWorks />

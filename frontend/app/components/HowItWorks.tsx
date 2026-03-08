@@ -21,7 +21,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-32 relative border-t border-white/5">
+    <section className="py-12 relative border-t border-white/5">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-20">
           <span className="text-[10px] font-bold text-emerald-500/50 uppercase tracking-[0.4em] mb-4 block">Operational Flow</span>

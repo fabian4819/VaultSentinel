@@ -26,7 +26,7 @@ const features = [
 
 export function SystemicRiskFeatures() {
   return (
-    <section className="py-32 relative">
+    <section className="py-12 relative">
       <div className="max-w-6xl mx-auto px-6 relative">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20">
           <div className="max-w-xl">

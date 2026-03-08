@@ -5,7 +5,7 @@ export function RiskGauge({ score }: { score: number }) {
   const percentage = Math.min(100, Math.max(0, score));
 
   return (
-    <div className="w-full py-20 relative">
+    <div className="w-full py-12 relative">
       {/* Background Glow for the Gauge Area */}
       <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-64 blur-[120px] opacity-20 pointer-events-none transition-colors duration-1000 ${percentage >= 70 ? "bg-red-500" : percentage >= 40 ? "bg-yellow-500" : "bg-emerald-500"}`} />
 
