@@ -10,8 +10,8 @@ export const ETH_ADDRESS = "0x0000000000000000000000000000000000000000" as `0x${
 
 export const SUPPORTED_TOKENS = [
     { symbol: "ETH", label: "Native ETH", address: ETH_ADDRESS, decimals: 18, isNative: true },
-    { symbol: "USDC", label: "Mock USDC", address: USDC_ADDRESS, decimals: 6, isNative: false },
-    { symbol: "stETH", label: "Mock stETH", address: STETH_ADDRESS, decimals: 18, isNative: false },
+    { symbol: "USDC", label: "USDC", address: USDC_ADDRESS, decimals: 6, isNative: false },
+    { symbol: "stETH", label: "stETH", address: STETH_ADDRESS, decimals: 18, isNative: false },
 ] as const;
 
 export const VAULT_ABI = parseAbi([
