@@ -138,7 +138,7 @@ export function Hero() {
           </div>
 
           {/* Left Side Card - Risk Analysis */}
-          <div className="floating-card absolute left-[-10%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 -rotate-12 opacity-60 text-left">
+          <div className="floating-card absolute left-[-35%] md:left-[-30%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 -rotate-12 opacity-50 text-left">
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-400 text-[10px] uppercase font-bold">Threat Level</span>
               <span className="text-[10px] text-emerald-500 font-bold underline">MINIMAL</span>
@@ -156,7 +156,7 @@ export function Hero() {
           </div>
 
           {/* Right Side Card - Active Safeguards */}
-          <div className="floating-card absolute right-[-10%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 rotate-12 opacity-60 text-left">
+          <div className="floating-card absolute right-[-35%] md:right-[-30%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 rotate-12 opacity-50 text-left">
             <div className="flex justify-between items-center mb-6">
               <span className="text-gray-400 text-[10px] uppercase font-bold">Safeguards</span>
               <div className="w-4 h-4 rounded-full border border-emerald-500/50 flex items-center justify-center">
