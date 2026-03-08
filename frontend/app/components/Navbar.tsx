@@ -5,6 +5,7 @@ import { injected } from "wagmi/connectors";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { TabNavigation } from "./TabNavigation";
+import Image from "next/image";
 
 interface NavbarProps {
   activeTab?: number;
@@ -38,13 +39,13 @@ export function Navbar({ activeTab, setActiveTab }: NavbarProps) {
         <div className="flex items-center gap-8">
           <motion.div 
             whileHover={{ opacity: 0.8 }}
-            className="flex items-center gap-2.5 cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer group"
+            onClick={() => setActiveTab?.(0)}
           >
-            <div className="relative w-2.5 h-2.5">
-              <div className="absolute inset-0 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-              <div className="-inset-0.5 absolute border border-blue-400/30 rounded-full scale-110 group-hover:scale-150 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
+            <div className="relative w-6 h-6 flex items-center justify-center">
+              <Image src="/logo.svg" alt="GuardAI Logo" width={24} height={24} className="w-full h-full" />
             </div>
-            <span className="font-bold text-[10px] tracking-[0.2em] text-white uppercase opacity-70 whitespace-nowrap">
+            <span className="font-black text-[11px] tracking-[0.25em] text-white uppercase whitespace-nowrap">
               GuardAI
             </span>
           </motion.div>

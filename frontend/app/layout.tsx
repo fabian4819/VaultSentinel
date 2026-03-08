@@ -23,6 +23,11 @@ const queryClient = new QueryClient();
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <title>GuardAI | Autonomous Risk Protection</title>
+        <meta name="description" content="Autonomous risk management platform powered by Chainlink CRE." />
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+      </head>
       <body suppressHydrationWarning>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>

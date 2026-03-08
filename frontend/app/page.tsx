@@ -10,6 +10,7 @@ import { SystemicRiskFeatures } from "./components/SystemicRiskFeatures";
 import { Portfolio } from "./components/Portfolio";
 import { PoolsGrid } from "./components/PoolsGrid";
 import { PoolDetailModal } from "./components/PoolDetailModal";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -236,14 +237,10 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="flex justify-center items-center gap-3 mb-8"
           >
-            <motion.span
-              className="text-3xl grayscale brightness-150"
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              🛡️
-            </motion.span>
-            <span className="font-extrabold text-xl text-gray-400 tracking-tighter uppercase font-mono">Vault Sentinel</span>
+            <div className="relative w-8 h-8 flex items-center justify-center">
+              <Image src="/logo.svg" alt="GuardAI Logo" width={32} height={32} className="w-full h-full opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500" />
+            </div>
+            <span className="font-extrabold text-xl text-gray-400 tracking-tighter uppercase font-mono">GuardAI</span>
           </motion.div>
           <motion.p
             initial={{ y: 20, opacity: 0 }}
