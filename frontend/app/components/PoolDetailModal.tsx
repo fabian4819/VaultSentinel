@@ -91,32 +91,32 @@ export function PoolDetailModal({
                 <div className="space-y-6 mb-8">
                   <div>
                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-3 block">Risk Breakdown</span>
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-600">Base Risk</span>
-                        <span className="text-[10px] font-mono text-white">{riskScore}/100</span>
+                        <span className="text-xs text-gray-600">Base Risk</span>
+                        <span className="text-sm font-mono font-bold text-white">{riskScore}/100</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-600">Multiplier</span>
-                        <span className="text-[10px] font-mono text-white">{pool.riskMultiplier}x</span>
+                        <span className="text-xs text-gray-600">Multiplier</span>
+                        <span className="text-sm font-mono font-bold text-white">{pool.riskMultiplier}x</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-600">Volatility</span>
-                        <span className="text-[10px] font-mono text-emerald-500/50">Low</span>
+                        <span className="text-xs text-gray-600">Volatility</span>
+                        <span className="text-sm font-bold text-emerald-400">Low</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-600">Liquidity</span>
-                        <span className="text-[10px] font-mono text-emerald-500/50">High</span>
+                        <span className="text-xs text-gray-600">Liquidity</span>
+                        <span className="text-sm font-bold text-emerald-400">High</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* System Info */}
-                <div className="space-y-3 mb-8">
-                  <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest">
-                    <span className="text-gray-600">Liquidity Depth</span>
-                    <span className="text-white">{pool.tvl}</span>
+                <div className="space-y-4 mb-10">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Liquidity Depth</span>
+                    <span className="text-lg font-bold text-white tracking-tight">{pool.tvl}</span>
                   </div>
                 </div>
 
