@@ -194,7 +194,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_70%)]" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 text-center pt-24">
         {/* Badge */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}

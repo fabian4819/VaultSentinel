@@ -57,7 +57,7 @@ export default function Home() {
 
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-8 pb-32">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-0 pb-32">
         <AnimatePresence mode="wait">
           {/* Tab 0: Home */}
           {activeTab === 0 && (
@@ -86,6 +86,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4 }}
+              className="pt-24"
             >
               <PoolsGrid onSelectPool={handlePoolSelect} riskScore={score} />
             </motion.div>
@@ -99,7 +100,7 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
-              className="max-w-2xl mx-auto"
+              className="max-w-2xl mx-auto pt-24"
             >
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -116,7 +117,7 @@ export default function Home() {
                   <span className="text-sm text-blue-400 font-semibold">Secure Deposit</span>
                 </motion.div>
                 <h2 className="text-5xl md:text-6xl font-black mb-4 tracking-tight">
-                  <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                     Secure Your Assets
                   </span>
                 </h2>
@@ -161,6 +162,7 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
+              className="pt-24"
             >
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -177,7 +179,7 @@ export default function Home() {
                   <span className="text-sm text-purple-400 font-semibold">Your Assets</span>
                 </motion.div>
                 <h2 className="text-5xl md:text-6xl font-black mb-4 tracking-tight">
-                  <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
                     Your Portfolio
                   </span>
                 </h2>
