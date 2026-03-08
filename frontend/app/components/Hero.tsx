@@ -68,64 +68,68 @@ export function Hero() {
     >
       {/* Background Neon Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-250 h-150 bg-emerald-500/10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-20%] left-1/2 -translate-x-1/2 w-300 h-200 bg-emerald-500/20 blur-[150px] rounded-full glow-effect" />
+        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-250 h-150 bg-emerald-500/15 blur-[100px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-300 h-200 bg-emerald-500/30 blur-[130px] rounded-full glow-effect" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 blur-[100px] rounded-full animate-pulse decoration-indigo-500" />
       </div>
 
       {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#10b981_0.5px,transparent_0.5px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_50%_50%_at_50%_50%,#000_20%,transparent_100%)] opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_60%_at_50%_50%,#000_30%,transparent_100%)] opacity-30 shadow-inner" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center pt-32">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center pt-24 scale-90 md:scale-100 origin-top">
         {/* Main Title */}
-        <h1 className="hero-title text-6xl md:text-[140px] font-black mb-8 leading-none tracking-tighter text-white opacity-90 blur-[0.5px]">
+        <h1 className="hero-title text-6xl md:text-[110px] font-black mb-4 leading-none tracking-tighter text-white opacity-90 blur-[0.5px]">
           Guard<span className="text-emerald-500">AI</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="hero-subtitle text-2xl md:text-3xl font-bold text-[#e2e8f0] mb-6 tracking-tight">
+        <p className="hero-subtitle text-xl md:text-2xl font-bold text-[#e2e8f0] mb-4 tracking-tight">
           Autonomous Risk Detection & <span className="opacity-60 text-emerald-400">Automated Fund Protection</span>
         </p>
 
         {/* Description */}
-        <p className="hero-description text-lg md:text-xl text-gray-500 mb-12 max-w-2xl mx-auto leading-relaxed">
+        <p className="hero-description text-base md:text-lg text-gray-500 mb-8 max-w-2xl mx-auto leading-relaxed">
           Powered by Chainlink Functions and CRE Workflows. Protect your DeFi assets 
           with real-time risk monitoring and instant autonomous response.
         </p>
 
         {/* Bottom Cards Visualization */}
-        <div className="relative w-full max-w-4xl mx-auto h-100">
-          {/* Main Dashboard Card */}
-          <div className="floating-card absolute left-1/2 -translate-x-1/2 top-0 w-full max-w-md aspect-4/3 bg-[#0a1518] rounded-3xl border border-emerald-500/30 p-8 shadow-[0_0_50px_rgba(16,185,129,0.15)] z-20 overflow-hidden">
+        <div className="relative w-full max-w-4xl mx-auto h-80">
+          {/* Main Dashboard Card - Security Status */}
+          <div className="floating-card absolute left-1/2 -translate-x-1/2 top-0 w-full max-w-md aspect-4/3 bg-[#0a1518] rounded-3xl border border-emerald-500/30 p-8 shadow-[0_0_50px_rgba(16,185,129,0.15)] z-20 overflow-hidden text-left">
             <div className="flex flex-col h-full">
-              <span className="text-gray-400 text-sm mb-2">Current Balance</span>
-              <span className="text-3xl font-bold text-white mb-8">$ 44,128.94</span>
+              <span className="text-gray-400 text-sm mb-2 uppercase tracking-widest font-bold">Security Status</span>
+              <span className="text-3xl font-bold text-white mb-8 flex items-center gap-2">
+                SHIELD ACTIVE
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
+              </span>
               
               <div className="flex gap-4 mb-auto">
                 <div className="flex-1 p-3 rounded-xl bg-white/5 border border-white/10">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20" />
-                    <span className="text-xs text-gray-400 uppercase">Tezos</span>
+                    <div className="w-2 h-2 rounded-full bg-blue-500" />
+                    <span className="text-[10px] text-gray-400 uppercase font-bold">TVL Protected</span>
                   </div>
-                  <div className="text-lg font-bold text-white">$ 5,148.42</div>
+                  <div className="text-lg font-bold text-white">$ 12.5M</div>
                   <div className="w-full h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-emerald-500 w-[53%]" />
+                    <div className="h-full bg-blue-500 w-[78%]" />
                   </div>
                 </div>
                 <div className="flex-1 p-3 rounded-xl bg-white/5 border border-white/10">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full bg-gray-500/20" />
-                    <span className="text-xs text-gray-400 uppercase">Ethereum</span>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="text-[10px] text-gray-400 uppercase font-bold">Risk Score</span>
                   </div>
-                  <div className="text-lg font-bold text-white">$ 5,148.42</div>
+                  <div className="text-lg font-bold text-white">98/100</div>
                   <div className="w-full h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-emerald-500 w-[22%]" />
+                    <div className="h-full bg-emerald-500 w-[98%]" />
                   </div>
                 </div>
               </div>
 
-              <button className="w-full py-3 bg-emerald-500/10 text-emerald-400 font-semibold rounded-xl border border-emerald-500/20 mt-6">
-                Deposit
+              <button className="w-full py-3 bg-emerald-500/10 text-emerald-400 font-bold uppercase tracking-widest text-xs rounded-xl border border-emerald-500/20 mt-6 hover:bg-emerald-500/20 transition-all">
+                Monitoring Live
               </button>
             </div>
             
@@ -133,41 +137,45 @@ export function Hero() {
             <div className="absolute bottom-0 left-0 w-full h-25 bg-linear-to-t from-emerald-500/10 to-transparent pointer-events-none" />
           </div>
 
-          {/* Left Side Card */}
-          <div className="floating-card absolute left-[-10%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 -rotate-12 opacity-60">
+          {/* Left Side Card - Risk Analysis */}
+          <div className="floating-card absolute left-[-10%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 -rotate-12 opacity-60 text-left">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-gray-400 text-sm">Ethereum</span>
-              <span className="text-xs text-gray-500">7 days ∨</span>
+              <span className="text-gray-400 text-[10px] uppercase font-bold">Threat Level</span>
+              <span className="text-[10px] text-emerald-500 font-bold underline">MINIMAL</span>
             </div>
-            <div className="text-2xl font-bold text-white mb-4">47,384</div>
+            <div className="text-2xl font-bold text-white mb-4 italic">Stable</div>
             <div className="h-20 w-full flex items-end gap-1">
-              {[40, 70, 45, 90, 65, 80, 55].map((h, i) => (
-                <div key={i} className="flex-1 bg-emerald-500/20 rounded-t-sm" style={{ height: `${h}%` } as React.CSSProperties} />
+              {[40, 30, 35, 20, 25, 15, 10].map((h, i) => (
+                <div 
+                  key={i} 
+                  className="flex-1 bg-emerald-500/40 rounded-t-sm animate-pulse" 
+                  style={{ height: `${h}%` } as React.CSSProperties} 
+                />
               ))}
             </div>
           </div>
 
-          {/* Right Side Card */}
-          <div className="floating-card absolute right-[-10%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 rotate-12 opacity-60">
+          {/* Right Side Card - Active Safeguards */}
+          <div className="floating-card absolute right-[-10%] top-20 w-70 aspect-4/3 bg-[#0a1518]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 z-10 rotate-12 opacity-60 text-left">
             <div className="flex justify-between items-center mb-6">
-              <span className="text-gray-400 text-sm">Quick Swap</span>
-              <div className="w-6 h-6 rounded-full bg-white/10" />
+              <span className="text-gray-400 text-[10px] uppercase font-bold">Safeguards</span>
+              <div className="w-4 h-4 rounded-full border border-emerald-500/50 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+              </div>
             </div>
             <div className="space-y-4">
-              <div className="flex justify-between text-xs">
-                <span className="text-gray-500">Send</span>
-                <span className="text-white">1,545</span>
+              <div className="flex justify-between text-[10px] font-bold">
+                <span className="text-gray-500 uppercase">Functions</span>
+                <span className="text-emerald-400 font-mono">ENABLED</span>
               </div>
               <div className="w-full h-px bg-white/10" />
-              <div className="flex justify-between text-xs">
-                <span className="text-gray-500">Received</span>
-                <span className="text-white">10,741.59</span>
+              <div className="flex justify-between text-[10px] font-bold">
+                <span className="text-gray-500 uppercase">Auto-Withdraw</span>
+                <span className="text-white font-mono opacity-50">READY</span>
               </div>
             </div>
-            <div className="mt-6 flex justify-center">
-              <div className="w-12 h-12 rounded-full border border-emerald-500/50 flex items-center justify-center text-emerald-500">
-                ↺
-              </div>
+            <div className="mt-8 flex justify-center">
+              <div className="text-[10px] text-gray-500 font-mono">GUARD_v2.0.4</div>
             </div>
           </div>
 

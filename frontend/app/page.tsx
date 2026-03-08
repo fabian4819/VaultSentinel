@@ -62,7 +62,7 @@ export default function Home() {
 
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-0 pb-32">
+      <main className="relative pt-0 pb-32">
         <AnimatePresence mode="wait">
           {/* Tab 0: Home */}
           {activeTab === 0 && (
@@ -74,11 +74,13 @@ export default function Home() {
               transition={{ duration: 0.4 }}
             >
               <Hero />
-              <div className="mt-16">
-                <RiskGauge score={score} />
-              </div>
-              <div className="mt-16">
-                <SystemicRiskFeatures />
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mt-16">
+                  <RiskGauge score={score} />
+                </div>
+                <div className="mt-16">
+                  <SystemicRiskFeatures />
+                </div>
               </div>
             </motion.div>
           )}
@@ -91,7 +93,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4 }}
-              className="pt-24"
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24"
             >
               <PoolsGrid onSelectPool={handlePoolSelect} riskScore={score} />
             </motion.div>
@@ -105,7 +107,7 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.4 }}
-              className="max-w-2xl mx-auto pt-24"
+              className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-24"
             >
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
