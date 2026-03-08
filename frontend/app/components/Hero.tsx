@@ -215,81 +215,47 @@ export function Hero() {
         </motion.div>
 
         {/* Main Title */}
-        <h1 className="hero-title text-7xl md:text-9xl font-black mb-8 leading-none tracking-tight">
-          <motion.span
-            className="block bg-linear-to-r from-white via-blue-100 to-white bg-clip-text text-transparent bg-size-[200%_auto]"
-            animate={{
-              backgroundPosition: ['0% center', '200% center'],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          >
+        <h1 className="hero-title text-6xl md:text-8xl font-bold mb-6 leading-none tracking-tight">
+          <span className="block text-white">
             Vault
-          </motion.span>
-          <motion.span
-            className="block bg-linear-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent bg-size-[200%_auto]"
-            animate={{
-              backgroundPosition: ['0% center', '200% center'],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          >
+          </span>
+          <span className="block text-blue-500">
             Sentinel
-          </motion.span>
+          </span>
         </h1>
 
         {/* Subtitle */}
         <motion.p
-          className="hero-subtitle text-2xl md:text-3xl text-gray-300 mb-6 max-w-4xl mx-auto leading-relaxed font-light"
+          className="hero-subtitle text-xl md:text-2xl text-gray-400 mb-6 max-w-3xl mx-auto leading-relaxed font-normal"
         >
           Autonomous Risk Detection &{" "}
-          <span className="text-blue-400 font-semibold">Automated Fund Protection</span>
+          <span className="text-white">Automated Fund Protection</span>
         </motion.p>
 
         {/* Description */}
         <motion.p
-          className="hero-description text-lg text-gray-500 mb-12 max-w-3xl mx-auto leading-relaxed"
+          className="hero-description text-base text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
           Powered by Chainlink Functions and CRE Workflows. Protect your DeFi assets 
           with real-time systemic risk monitoring and instant emergency response.
         </motion.p>
 
         {/* CTA Buttons */}
-        <div className="hero-cta flex flex-wrap justify-center gap-5 mb-20">
+        <div className="hero-cta flex flex-wrap justify-center gap-4 mb-16">
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 0 50px rgba(59, 130, 246, 0.5)" }}
-            whileTap={{ scale: 0.95 }}
-            className="group relative px-10 py-5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold text-lg overflow-hidden transition-all"
+            whileHover={{ scale: 1.02, backgroundColor: "#3b82f6" }}
+            whileTap={{ scale: 0.98 }}
+            className="group relative px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-base transition-all"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              Launch App
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
-            </span>
-            <motion.div
-              className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-            />
+            Launch App
           </motion.button>
           
           <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-10 py-5 bg-white/5 text-white rounded-2xl font-bold text-lg transition-all border border-white/10 backdrop-blur-sm"
+            whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+            whileTap={{ scale: 0.98 }}
+            className="px-8 py-4 bg-transparent text-gray-400 rounded-xl font-bold text-base transition-all border border-gray-800"
           >
-            Read Documentation
+            Documentation
           </motion.button>
         </div>
 

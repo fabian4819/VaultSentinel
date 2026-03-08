@@ -16,8 +16,8 @@ const TABS = [
 
 export function TabNavigation({ activeTab, setActiveTab, isCompact = false }: TabNavigationProps) {
   return (
-    <div className={`flex ${isCompact ? "justify-start" : "justify-center"} ${isCompact ? "" : "mb-8"}`}>
-      <div className={`inline-flex ${isCompact ? "bg-transparent" : "bg-gray-900/60"} backdrop-blur-xl p-1.5 rounded-3xl ${isCompact ? "border-none" : "border border-gray-800/50"} relative overflow-hidden transition-all duration-300`}>
+    <div className={`flex ${isCompact ? "justify-center" : "justify-center"} ${isCompact ? "" : "mb-8"}`}>
+      <div className={`inline-flex ${isCompact ? "bg-transparent" : "bg-gray-900/60"} backdrop-blur-xl p-1 rounded-2xl ${isCompact ? "border-none" : "border border-gray-800/50"} relative overflow-hidden transition-all duration-300`}>
         {!isCompact && (
           <motion.div
             className="absolute inset-0 bg-linear-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 opacity-30"
@@ -37,19 +37,17 @@ export function TabNavigation({ activeTab, setActiveTab, isCompact = false }: Ta
             <motion.button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+              className={`relative px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
                 activeTab === tab.id
-                  ? "text-black"
-                  : "text-gray-500 hover:text-white"
+                  ? "text-white"
+                  : "text-gray-500 hover:text-gray-300"
               }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-white shadow-[0_0_20px_rgba(255,255,255,0.3)] rounded-2xl"
-                  transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                  className="absolute inset-0 bg-white/5 border border-white/10 rounded-xl"
+                  transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                 />
               )}
               <span className="relative z-10">{tab.label}</span>
