@@ -7,6 +7,7 @@ import { ActionPanel } from "./components/ActionPanel";
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { SystemicRiskFeatures } from "./components/SystemicRiskFeatures";
+import { HowItWorks } from "./components/HowItWorks";
 import { Portfolio } from "./components/Portfolio";
 import { PoolsGrid } from "./components/PoolsGrid";
 import { PoolDetailModal } from "./components/PoolDetailModal";
@@ -81,6 +82,7 @@ export default function Home() {
                 <div className="mt-16">
                   <SystemicRiskFeatures />
                 </div>
+                <HowItWorks />
               </div>
             </motion.div>
           )}

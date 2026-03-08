@@ -90,17 +90,6 @@ export function SystemicRiskFeatures() {
             </motion.div>
           ))}
         </div>
-
-        {/* Bottom CTA/Info */}
-        <div className="mt-16 flex flex-col md:flex-row items-center justify-center gap-8 text-center md:text-left">
-          <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-            <div className="w-2 h-2 rounded-full bg-blue-500" />
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Chainlink Functions v2.1</span>
-          </div>
-          <p className="text-gray-600 text-xs font-medium max-w-md">
-            All risk signals are cryptographically verified and processed through decentralized oracle networks.
-          </p>
-        </div>
       </div>
     </section>
   );
